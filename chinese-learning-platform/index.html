@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>汉语中心</title>
+<meta name="description" content="汉语中心 — платформа для изучения китайского с интервальным повторением и MCP-сервером для Claude.">
+<meta property="og:title" content="汉语中心 — платформа для изучения китайского">
+<meta property="og:description" content="Колоды, интервальное повторение, словарь с порядком черт и Claude в роли репетитора.">
+<meta property="og:image" content="https://laxier.github.io/chinese-learning-platform/screenshots/profile_top.png">
+<style>
+  /* базовый сброс (на claude.ai его добавляла обёртка) */
+  html { color-scheme: light; }
+  @media (prefers-color-scheme: dark) { html { color-scheme: dark; } }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&family=Noto+Serif+SC:wght@500;700&display=swap">
+<style>
+  /* Layout: страница-прописи — заголовок в клетках 米字格, дальше спокойные белые листы с реальными экранами сайта. */
+  :root {
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --ink: #1c2230;
+    --muted: #5d6677;
+    --line: #dde2ea;
+    --accent: #1f5fd6;
+    --seal: #c8372d;
+    --grid: #e6b8b3;
+    --code: #eef2f8;
+    --display: "Unbounded", "Golos Text", system-ui, sans-serif;
+    --body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --hanzi: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #13161b; --surface: #1b1f26; --ink: #e7eaf0; --muted: #a0a9b8; --line: #2b313b;
+      --accent: #78a9ff; --seal: #ff6f61; --grid: #5a3431; --code: #222833; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #13161b; --surface: #1b1f26; --ink: #e7eaf0; --muted: #a0a9b8; --line: #2b313b;
+    --accent: #78a9ff; --seal: #ff6f61; --grid: #5a3431; --code: #222833; color-scheme: dark;
+  }
+
+  body { background: var(--bg); color: var(--ink); font: 400 1rem/1.6 var(--body); padding-inline: 16px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-block: 3rem 4rem; display: grid; gap: 4.5rem; }
+  a { color: var(--accent); }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  h2 { font: 700 clamp(1.4rem, 3vw, 1.9rem)/1.2 var(--display); letter-spacing: -0.01em; }
+  h3 { font: 600 1.05rem/1.3 var(--body); }
+  p { margin: 0; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 62ch; }
+  .eyebrow { font: 600 .75rem/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .hz { font-family: var(--hanzi); }
+
+  /* Hero: название в клетках для прописей */
+  .hero { display: grid; gap: 1.75rem; }
+  .cells { display: flex; flex-wrap: wrap; gap: 0; }
+  .cell {
+    width: clamp(64px, 17vw, 128px); aspect-ratio: 1; max-width: 100%;
+    display: grid; place-items: center; position: relative;
+    border: 1.5px solid var(--grid); margin-left: -1.5px;
+    font: 700 clamp(2.6rem, 11vw, 5.4rem)/1 var(--hanzi); color: var(--ink);
+    background:
+      linear-gradient(to right, transparent calc(50% - .5px), var(--grid) calc(50% - .5px), var(--grid) calc(50% + .5px), transparent calc(50% + .5px)),
+      linear-gradient(to bottom, transparent calc(50% - .5px), var(--grid) calc(50% - .5px), var(--grid) calc(50% + .5px), transparent calc(50% + .5px)),
+      linear-gradient(45deg, transparent calc(50% - .5px), var(--grid) 50%, transparent calc(50% + .5px)),
+      linear-gradient(-45deg, transparent calc(50% - .5px), var(--grid) 50%, transparent calc(50% + .5px));
+    opacity: 0; animation: ink .6s ease-out forwards;
+  }
+  .cell:first-child { margin-left: 0; }
+  .cell:nth-child(2) { animation-delay: .12s; } .cell:nth-child(3) { animation-delay: .24s; } .cell:nth-child(4) { animation-delay: .36s; }
+  @keyframes ink { from { opacity: .15; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .cell { animation: none; opacity: 1; } }
+  .title-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+  .seal {
+    font: 700 1rem/1.05 var(--hanzi); color: var(--seal); border: 2px solid var(--seal); border-radius: 6px;
+    padding: .35rem .4rem; writing-mode: vertical-rl; letter-spacing: .1em; transform: rotate(-4deg);
+  }
+  .hero h1 { font: 500 clamp(1.15rem, 2.4vw, 1.45rem)/1.35 var(--display); max-width: 34ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.2rem; border-radius: 999px;
+    font: 600 .95rem/1 var(--body); text-decoration: none; border: 1.5px solid var(--accent);
+  }
+  .btn.primary { background: var(--accent); color: var(--bg); }
+  .btn.ghost { color: var(--accent); }
+  .facts { display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; color: var(--muted); font-size: .95rem; }
+  .facts b { color: var(--ink); font: 700 1.25rem/1 var(--display); margin-right: .35rem; font-variant-numeric: tabular-nums; }
+
+  /* Экраны */
+  .shot { margin: 0; display: grid; gap: .6rem; min-width: 0; }
+  .frame { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--surface); box-shadow: 0 10px 30px rgb(20 30 50 / .08); }
+  .frame .bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  .frame .bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+  .frame img { display: block; width: 100%; height: auto; }
+  .shot figcaption { font-size: .9rem; color: var(--muted); }
+  .shot figcaption b { color: var(--ink); font-weight: 600; }
+  .showcase { display: grid; gap: 2.5rem; }
+  .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 1.75rem; align-items: start; }
+
+  /* Возможности */
+  .section { display: grid; gap: 1.5rem; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1rem; }
+  .feature { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem; display: grid; gap: .45rem; align-content: start; }
+  .feature p { color: var(--muted); font-size: .95rem; }
+
+  /* MCP */
+  .mcp { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 2rem; align-items: start; }
+  .mcp .text { display: grid; gap: 1rem; min-width: 0; }
+  .mcp ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .45rem; color: var(--muted); }
+  .mcp ul b { color: var(--ink); font-weight: 600; }
+  .chat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1rem; display: grid; gap: .75rem; min-width: 0; }
+  .chat .label { font-size: .78rem; color: var(--muted); }
+  .msg { padding: .7rem .9rem; border-radius: 12px; max-width: 92%; font-size: .95rem; }
+  .msg.me { justify-self: end; background: var(--accent); color: var(--bg); border-bottom-right-radius: 4px; }
+  .msg.ai { background: var(--code); border-bottom-left-radius: 4px; }
+  .msg ol { margin: .35rem 0 0; padding-left: 1.3rem; }
+  .tool { font: 500 .78rem/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); background: var(--code); border: 1px dashed var(--line); border-radius: 8px; padding: .35rem .55rem; justify-self: start; overflow-wrap: anywhere; }
+
+  /* Стек и путь */
+  .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 2.5rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: .3rem .75rem; font-size: .9rem; }
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .timeline li { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1rem; }
+  .timeline .year { font: 700 1rem/1.5 var(--display); color: var(--seal); font-variant-numeric: tabular-nums; }
+  .timeline .stage { display: grid; gap: .25rem; min-width: 0; }
+  .timeline p { color: var(--muted); }
+
+  footer { border-top: 1px solid var(--line); padding-top: 1.5rem; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; justify-content: space-between; color: var(--muted); font-size: .9rem; }
+  .mobile { justify-self: center; width: min(100%, 300px); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="title-row">
+      <div class="cells" aria-label="汉语中心">
+        <span class="cell" aria-hidden="true">汉</span><span class="cell" aria-hidden="true">语</span><span class="cell" aria-hidden="true">中</span><span class="cell" aria-hidden="true">心</span>
+      </div>
+      <span class="seal" aria-hidden="true">汉语</span>
+    </div>
+    <h1>Платформа для изучения китайского — с колодами, интервальным повторением и Claude в роли репетитора</h1>
+    <p class="lead">Сайт для русскоязычных студентов: собираешь колоды слов, повторяешь их в тренажёре, смотришь порядок черт и примеры, ведёшь расписание уроков. А через MCP-сервер Claude проводит занятия прямо по твоим колодам и записывает результат обратно на сайт.</p>
+    <div class="actions">
+      <a class="btn primary" href="https://chinesesite-hahshkj2wkj.amvera.io/" target="_blank" rel="noopener">Открыть сайт</a>
+      <a class="btn ghost" href="https://chinesesite-hahshkj2wkj.amvera.io/api/v1/mcp-doc/" target="_blank" rel="noopener">Документация MCP</a>
+    </div>
+    <div class="facts">
+      <span><b>с 2024</b>в разработке</span>
+      <span><b>38</b>инструментов для Claude</span>
+      <span><b>7</b>сценариев занятий</span>
+    </div>
+  </header>
+
+  <section class="showcase" aria-label="Экраны сайта">
+    <figure class="shot">
+      <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="screenshots/profile_top.png" alt="Профиль ученика: сводка, активность за 30 дней, покрытие HSK" width="1280" height="1180"></div>
+      <figcaption><b>Профиль ученика.</b> Сколько слов изучается и выучено, активность по дням, покрытие уровней HSK, слабые слова и ошибки по типам — те же данные видит Claude.</figcaption>
+    </figure>
+    <div class="pair">
+      <figure class="shot">
+        <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="screenshots/deck_detail.png" alt="Колода с графиком результатов тестов" loading="lazy" width="1280" height="1326"></div>
+        <figcaption><b>Колода.</b> График тестов по датам и прогресс по каждому слову.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="screenshots/word.png" alt="Страница слова 电话 с порядком черт и примерами" loading="lazy" width="1280" height="860"></div>
+        <figcaption><b>Слово.</b> Пиньинь, перевод, уровень HSK, анимация порядка черт и примеры предложений.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="screenshots/flashcards.png" alt="Тренажёр: тест по колоде" loading="lazy" width="1280" height="860"></div>
+        <figcaption><b>Тренажёр.</b> Повторение того, что пора, или тест всей колоды.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="screenshots/home.png" alt="Главная: недавние колоды и слова" loading="lazy" width="1280" height="860"></div>
+        <figcaption><b>Главная.</b> Недавние колоды и слова под рукой.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="features">
+    <span class="eyebrow">Что умеет</span>
+    <h2 id="features">Всё для ежедневной практики</h2>
+    <div class="features">
+      <div class="feature"><h3>Интервальное повторение</h3><p>У каждого слова свой интервал: ответил верно — вернётся позже, ошибся — завтра. Алгоритм в духе SM-2 с поправкой на точность.</p></div>
+      <div class="feature"><h3>Омонимы под контролем</h3><p>行 xíng и 行 háng — разные записи. При добавлении в колоду сайт не угадывает, а предлагает выбрать нужную.</p></div>
+      <div class="feature"><h3>Покрытие HSK</h3><p>Сколько слов каждого уровня уже выучено и сколько осталось до официального объёма экзамена.</p></div>
+      <div class="feature"><h3>Ошибки по типам</h3><p>Тон, чтение, написание, значение — видно, что именно проседает, и из этих слов можно собрать отдельную колоду.</p></div>
+      <div class="feature"><h3>Архив без потери интервалов</h3><p>Давно заброшенные слова и колоды уходят в архив и не забивают «повторить сегодня». Повторил — вернулись.</p></div>
+      <div class="feature"><h3>Расписание и домашка</h3><p>Календарь уроков с синхронизацией iCal, задания к урокам и фото выполненных работ.</p></div>
+    </div>
+  </section>
+
+  <section class="mcp" aria-labelledby="mcp">
+    <div class="text">
+      <span class="eyebrow">MCP</span>
+      <h2 id="mcp">Claude ведёт занятие по твоим колодам</h2>
+      <p class="lead">Сайт — MCP-сервер. В Claude добавляется одной ссылкой, вход через аккаунт сайта. Дальше Claude видит колоды, прогресс и ошибки — и всё, что ты ответил, записывается обратно.</p>
+      <ul>
+        <li><b>Диктант на бумаге:</b> список значений в чат, ответы — текстом или фото листа.</li>
+        <li><b>Повторение колоды</b> по одному слову с честной отметкой тона и чтения.</li>
+        <li><b>Подготовка к HSK:</b> что осталось выучить, слабые места, колоды «Экспресс» и норма в день до экзамена.</li>
+        <li><b>OAuth 2.1</b> с PKCE и динамической регистрацией; любое подключение отключается из профиля.</li>
+      </ul>
+    </div>
+    <div class="chat" aria-label="Пример диалога">
+      <span class="label">Пример диалога</span>
+      <div class="msg me">Устрой диктант по колоде «Экспресс 11.26 · Глаголы»</div>
+      <div class="tool">start_deck_review(deck_id=173, mode="due")</div>
+      <div class="msg ai">Пиши на листе, ответы пришли фото или текстом:
+        <ol><li>обсуждать, советоваться</li><li>готовить(ся)</li><li>выбирать</li><li>считать, полагать</li></ol>
+      </div>
+      <div class="msg me">1 <span class="hz">商量</span> 2 <span class="hz">准各</span> 3 <span class="hz">选择</span> 4 <span class="hz">觉得</span></div>
+      <div class="msg ai">3 из 4. Во втором — <span class="hz">准备</span> (zhǔnbèi): нижняя часть <span class="hz">备</span>, а не <span class="hz">各</span>. Записал результат.</div>
+      <div class="tool">finish_deck_review(… "error_types": ["writing"] …)</div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="looks">
+    <span class="eyebrow">Интерфейс</span>
+    <h2 id="looks">Светлая, тёмная и на телефоне</h2>
+    <div class="pair">
+      <figure class="shot">
+        <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="screenshots/profile_dark.png" alt="Профиль в тёмной теме" loading="lazy" width="1280" height="860"></div>
+        <figcaption><b>Тёмная тема</b> на общей дизайн-системе сайта.</figcaption>
+      </figure>
+      <figure class="shot mobile">
+        <div class="frame"><img src="screenshots/profile_mobile.png" alt="Профиль на телефоне" loading="lazy" width="780" height="1688"></div>
+        <figcaption><b>Телефон</b> — основной способ заниматься.</figcaption>
+      </figure>
+    </div>
+    <figure class="shot">
+      <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="screenshots/mcp_docs_tool.png" alt="Документация MCP в стиле ReDoc" loading="lazy" width="1280" height="860"></div>
+      <figcaption><b>Документация MCP</b> собирается из кода: инструменты, параметры, примеры запросов.</figcaption>
+    </figure>
+  </section>
+
+  <section class="split" aria-label="Стек и история">
+    <div class="section">
+      <span class="eyebrow">Стек</span>
+      <h2>На чём сделано</h2>
+      <div class="chips">
+        <span class="chip">Python 3.11</span><span class="chip">Django 5.1</span><span class="chip">Django REST Framework</span>
+        <span class="chip">OpenAPI · Swagger · ReDoc</span><span class="chip">SQLite</span><span class="chip">gunicorn</span>
+        <span class="chip">Bootstrap 5</span><span class="chip">Chart.js</span><span class="chip">MCP · JSON-RPC</span>
+        <span class="chip">OAuth 2.1 · PKCE · DCR</span><span class="chip">Amvera</span>
+      </div>
+      <p class="lead">MCP-сервер встроен прямо в Django — без отдельного сервиса и сторонних SDK. REST API отдельно обслуживает локальный видеоплеер с китайскими субтитрами.</p>
+    </div>
+    <div class="section">
+      <span class="eyebrow">Путь</span>
+      <h2>Как рос проект</h2>
+      <ol class="timeline">
+        <li><span class="year">2024</span><div class="stage"><h3>Идея</h3><p>Личный инструмент для занятий китайским с преподавателем: слова с уроков, словарь, колоды и повторение — в одном месте. Первая версия на Flask, затем переезд на Django.</p></div></li>
+        <li><span class="year">2025</span><div class="stage"><h3>Профессиональные навыки</h3><p>Проект стал площадкой для рабочих практик: REST API с OpenAPI-документацией, расписание с синхронизацией календарей, своя дизайн-система со светлой и тёмной темой, деплой с автоматическими миграциями.</p></div></li>
+        <li><span class="year">2026</span><div class="stage"><h3>Работа с MCP</h3><p>Сайт сам стал MCP-сервером с OAuth 2.1: Claude ведёт занятия по колодам ученика, видит прогресс и ошибки и записывает результат обратно.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <span><a href="../">← Все проекты</a> · Авторы — Кирилл Тимофеев и Claude (Anthropic)</span>
+    <span><a href="https://chinesesite-hahshkj2wkj.amvera.io/" target="_blank" rel="noopener">chinesesite-hahshkj2wkj.amvera.io</a></span>
+  </footer>
+</div>
+</body>
+</html>
