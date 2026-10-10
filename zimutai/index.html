@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>字幕台</title>
+<meta name="description" content="字幕台 — локальный плеер для изучения китайского по видео: субтитры по словам, словарь и отправка слов в колоду.">
+<meta property="og:title" content="字幕台 — плеер для изучения китайского по видео">
+<meta property="og:description" content="Субтитры разбиты на слова: клик — значение и пиньинь, ещё клик — слово в колоде.">
+<meta property="og:image" content="https://laxier.github.io/zimutai/img/word.png">
+<style>
+  /* базовый сброс (на claude.ai его добавляла обёртка) */
+  html { color-scheme: light; }
+  @media (prefers-color-scheme: dark) { html { color-scheme: dark; } }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&family=Noto+Serif+SC:wght@500;700&display=swap">
+<style>
+  /* Layout: страница-прописи — заголовок в клетках 米字格, дальше спокойные белые листы с реальными экранами сайта. */
+  :root {
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --ink: #1c2230;
+    --muted: #5d6677;
+    --line: #dde2ea;
+    --accent: #1f5fd6;
+    --seal: #c8372d;
+    --grid: #e6b8b3;
+    --code: #eef2f8;
+    --display: "Unbounded", "Golos Text", system-ui, sans-serif;
+    --body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --hanzi: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #13161b; --surface: #1b1f26; --ink: #e7eaf0; --muted: #a0a9b8; --line: #2b313b;
+      --accent: #78a9ff; --seal: #ff6f61; --grid: #5a3431; --code: #222833; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #13161b; --surface: #1b1f26; --ink: #e7eaf0; --muted: #a0a9b8; --line: #2b313b;
+    --accent: #78a9ff; --seal: #ff6f61; --grid: #5a3431; --code: #222833; color-scheme: dark;
+  }
+
+  body { background: var(--bg); color: var(--ink); font: 400 1rem/1.6 var(--body); padding-inline: 16px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-block: 3rem 4rem; display: grid; gap: 4.5rem; }
+  a { color: var(--accent); }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  h2 { font: 700 clamp(1.4rem, 3vw, 1.9rem)/1.2 var(--display); letter-spacing: -0.01em; }
+  h3 { font: 600 1.05rem/1.3 var(--body); }
+  p { margin: 0; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 62ch; }
+  .eyebrow { font: 600 .75rem/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .hz { font-family: var(--hanzi); }
+
+  /* Hero: название в клетках для прописей */
+  .hero { display: grid; gap: 1.75rem; }
+  .cells { display: flex; flex-wrap: wrap; gap: 0; }
+  .cell {
+    width: clamp(64px, 17vw, 128px); aspect-ratio: 1; max-width: 100%;
+    display: grid; place-items: center; position: relative;
+    border: 1.5px solid var(--grid); margin-left: -1.5px;
+    font: 700 clamp(2.6rem, 11vw, 5.4rem)/1 var(--hanzi); color: var(--ink);
+    background:
+      linear-gradient(to right, transparent calc(50% - .5px), var(--grid) calc(50% - .5px), var(--grid) calc(50% + .5px), transparent calc(50% + .5px)),
+      linear-gradient(to bottom, transparent calc(50% - .5px), var(--grid) calc(50% - .5px), var(--grid) calc(50% + .5px), transparent calc(50% + .5px)),
+      linear-gradient(45deg, transparent calc(50% - .5px), var(--grid) 50%, transparent calc(50% + .5px)),
+      linear-gradient(-45deg, transparent calc(50% - .5px), var(--grid) 50%, transparent calc(50% + .5px));
+    opacity: 0; animation: ink .6s ease-out forwards;
+  }
+  .cell:first-child { margin-left: 0; }
+  .cell:nth-child(2) { animation-delay: .12s; } .cell:nth-child(3) { animation-delay: .24s; } .cell:nth-child(4) { animation-delay: .36s; }
+  @keyframes ink { from { opacity: .15; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .cell { animation: none; opacity: 1; } }
+  .title-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+  .seal {
+    font: 700 1rem/1.05 var(--hanzi); color: var(--seal); border: 2px solid var(--seal); border-radius: 6px;
+    padding: .35rem .4rem; writing-mode: vertical-rl; letter-spacing: .1em; transform: rotate(-4deg);
+  }
+  .hero h1 { font: 500 clamp(1.15rem, 2.4vw, 1.45rem)/1.35 var(--display); max-width: 34ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.2rem; border-radius: 999px;
+    font: 600 .95rem/1 var(--body); text-decoration: none; border: 1.5px solid var(--accent);
+  }
+  .btn.primary { background: var(--accent); color: var(--bg); }
+  .btn.ghost { color: var(--accent); }
+  .facts { display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; color: var(--muted); font-size: .95rem; }
+  .facts b { color: var(--ink); font: 700 1.25rem/1 var(--display); margin-right: .35rem; font-variant-numeric: tabular-nums; }
+
+  /* Экраны */
+  .shot { margin: 0; display: grid; gap: .6rem; min-width: 0; }
+  .frame { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--surface); box-shadow: 0 10px 30px rgb(20 30 50 / .08); }
+  .frame .bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  .frame .bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+  .frame img { display: block; width: 100%; height: auto; }
+  .shot figcaption { font-size: .9rem; color: var(--muted); }
+  .shot figcaption b { color: var(--ink); font-weight: 600; }
+  .showcase { display: grid; gap: 2.5rem; }
+  .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 1.75rem; align-items: start; }
+
+  /* Возможности */
+  .section { display: grid; gap: 1.5rem; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1rem; }
+  .feature { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem; display: grid; gap: .45rem; align-content: start; }
+  .feature p { color: var(--muted); font-size: .95rem; }
+
+  /* MCP */
+  .mcp { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 2rem; align-items: start; }
+  .mcp .text { display: grid; gap: 1rem; min-width: 0; }
+  .mcp ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .45rem; color: var(--muted); }
+  .mcp ul b { color: var(--ink); font-weight: 600; }
+  .chat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1rem; display: grid; gap: .75rem; min-width: 0; }
+  .chat .label { font-size: .78rem; color: var(--muted); }
+  .msg { padding: .7rem .9rem; border-radius: 12px; max-width: 92%; font-size: .95rem; }
+  .msg.me { justify-self: end; background: var(--accent); color: var(--bg); border-bottom-right-radius: 4px; }
+  .msg.ai { background: var(--code); border-bottom-left-radius: 4px; }
+  .msg ol { margin: .35rem 0 0; padding-left: 1.3rem; }
+  .tool { font: 500 .78rem/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); background: var(--code); border: 1px dashed var(--line); border-radius: 8px; padding: .35rem .55rem; justify-self: start; overflow-wrap: anywhere; }
+
+  /* Стек и путь */
+  .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 2.5rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: .3rem .75rem; font-size: .9rem; }
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .timeline li { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1rem; }
+  .timeline .year { font: 700 1rem/1.5 var(--display); color: var(--seal); font-variant-numeric: tabular-nums; }
+  .timeline .stage { display: grid; gap: .25rem; min-width: 0; }
+  .timeline p { color: var(--muted); }
+
+  footer { border-top: 1px solid var(--line); padding-top: 1.5rem; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; justify-content: space-between; color: var(--muted); font-size: .9rem; }
+  .mobile { justify-self: center; width: min(100%, 300px); }
+  .split > .section { align-content: start; }
+  .plain { margin: 0; padding-left: 1.1rem; display: grid; gap: .45rem; color: var(--muted); }
+  .plain b { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="title-row">
+      <div class="cells" aria-label="字幕台">
+        <span class="cell" aria-hidden="true">字</span><span class="cell" aria-hidden="true">幕</span><span class="cell" aria-hidden="true">台</span>
+      </div>
+      <span class="seal" aria-hidden="true">字幕</span>
+    </div>
+    <h1>Плеер для изучения китайского по видео: субтитры по словам, словарь под курсором и слова — сразу в колоду</h1>
+    <p class="lead">Открываешь серию и файл субтитров — каждая реплика разбита на слова. Клик по слову показывает чтение и значение, ещё один отправляет его в колоду на сайте <span class="hz">汉语中心</span> вместе с репликой, где оно встретилось. Всё работает локально: видео никуда не загружается.</p>
+    <div class="actions">
+      <a class="btn primary" href="../hanyu/">Сайт с колодами — 汉语中心</a>
+    </div>
+    <div class="facts">
+      <span><b>198 тыс.</b>статей в словаре</span>
+      <span><b>2</b>зависимости</span>
+      <span><b>0</b>байт видео уходит в сеть</span>
+    </div>
+  </header>
+
+  <section class="showcase" aria-label="Экраны плеера">
+    <figure class="shot">
+      <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/word.png" alt="Плеер: видео слева, реплики справа, открыта карточка слова 护照" width="1440" height="860"></div>
+      <figcaption><b>Карточка слова.</b> Реплики идут справа и следуют за видео; слово под курсором — с пиньинем и значениями из словаря. На скриншотах демо-ролик и учебный диалог.</figcaption>
+    </figure>
+    <div class="pair">
+      <figure class="shot">
+        <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/player.png" alt="Плеер с двумя дорожками субтитров поверх видео" loading="lazy" width="1440" height="860"></div>
+        <figcaption><b>Две дорожки.</b> Китайская и перевод — в списке и поверх видео; клик по реплике перематывает.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/draft.png" alt="Черновик: отобранные слова с пиньинем, значением и репликой" loading="lazy" width="1440" height="860"></div>
+        <figcaption><b>Черновик.</b> Слова копятся по ходу просмотра, потом одним нажатием уходят в колоду или в файл для Anki.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="features">
+    <span class="eyebrow">Что умеет</span>
+    <h2 id="features">Смотреть и учить, не отрываясь от серии</h2>
+    <div class="features">
+      <div class="feature"><h3>Разбивка на слова</h3><p>В китайском нет пробелов. Реплики режет jieba, а слова из колод ученика подгружаются в её словарь — имена и термины из его материала режутся правильно.</p></div>
+      <div class="feature"><h3>Свои слова видно сразу</h3><p>Слова из колод приглушены, новые — светлые, а те, на которых ученик ошибается, подсвечены жёлтым. Статистика приходит с сайта.</p></div>
+      <div class="feature"><h3>Слово вместе с контекстом</h3><p>В колоду уходит не только слово, но и реплика, где оно прозвучало. Добавление идемпотентно: дубликатов не будет.</p></div>
+      <div class="feature"><h3>Повтор и петля</h3><p>Повторить реплику, зациклить её, замедлить до 0,5×, сдвинуть субтитры на десятые доли секунды — всё с клавиатуры.</p></div>
+      <div class="feature"><h3>Клипы</h3><p>Клавиша C вырезает реплику из видео через ffmpeg — готовый фрагмент для карточки.</p></div>
+      <div class="feature"><h3>Субтитры из звука</h3><p>Если субтитров нет, их распознаёт Whisper, а отдельный скрипт чистит типичные повторы и галлюцинации поверх музыки и тишины.</p></div>
+    </div>
+  </section>
+
+  <section class="split" aria-label="Устройство и стек">
+    <div class="section">
+      <span class="eyebrow">Устройство</span>
+      <h2>Локальный сервер вместо одной страницы</h2>
+      <p class="lead">Интерфейс открывается в браузере, но рядом работает маленький сервер на стандартной библиотеке Python. Он режет реплики, запускает ffmpeg и сам ходит на сайт.</p>
+      <ul class="plain">
+        <li><b>Приватность.</b> Сервер слушает только 127.0.0.1. Наружу уходит лишь текст — слова и реплики, которые ученик сам отправил в колоду.</li>
+        <li><b>Токен не в браузере.</b> Он лежит в файле с правами 600; страница его не видит — запросы к сайту идут через локальный сервер.</li>
+        <li><b>Работает без сети.</b> Плеер, словарь и черновик не требуют входа на сайт.</li>
+        <li><b>Продолжает с места.</b> Позиция, субтитры и черновик запоминаются отдельно для каждого видео.</li>
+      </ul>
+    </div>
+    <div class="section">
+      <span class="eyebrow">Стек</span>
+      <h2>На чём сделано</h2>
+      <div class="chips">
+        <span class="chip">Python · http.server</span><span class="chip">jieba</span><span class="chip">pypinyin</span>
+        <span class="chip">CC-CEDICT</span><span class="chip">JavaScript без фреймворков</span><span class="chip">ffmpeg</span>
+        <span class="chip">Whisper</span><span class="chip">REST API 汉语中心</span>
+      </div>
+      <p class="lead">Около 2,5 тысячи строк. Плеер — спутник сайта <a href="../hanyu/"><span class="hz">汉语中心</span></a>: колоды, прогресс и статистика ошибок живут там.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Авторы — Кирилл Тимофеев и Claude (Anthropic)</span>
+  </footer>
+</div>
+</body>
+</html>
