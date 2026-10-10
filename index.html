@@ -50,6 +50,8 @@
     display: inline-flex; align-items: center; gap: .45rem; padding: .6rem 1.05rem; border-radius: 999px;
     font: 600 .9rem/1 var(--body); text-decoration: none; background: var(--accent); color: var(--bg); white-space: nowrap;
   }
+  .download { display: grid; justify-items: start; gap: .35rem; }
+  .updated { color: var(--muted); font-size: .8rem; }
   .btn svg { width: 1em; height: 1em; }
   .contacts { display: flex; flex-wrap: wrap; gap: .35rem 1.4rem; color: var(--muted); font-size: .93rem; }
   .contacts a, .contacts span { color: inherit; display: inline-flex; align-items: center; gap: .4rem; }
@@ -85,6 +87,7 @@
     body { padding: 0; }
     .sheet { border: 0; border-radius: 0; padding: 1.75rem 16px 2rem; gap: 1.9rem; }
     .two { grid-template-columns: 1fr; gap: 1.9rem; }
+    .download { width: 100%; justify-items: stretch; text-align: center; }
     .btn { width: 100%; justify-content: center; }
     footer { padding: 0 16px 2rem; }
   }
@@ -104,10 +107,6 @@
         <h1>Тимофеев Кирилл Юрьевич</h1>
         <p class="title">Junior+ ML / LLM Engineer</p>
       </div>
-      <a class="btn" href="docs/cv/Тимофеев_Кирилл_Юрьевич_FlowCV_Resume_2026-10-10.pdf" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
-        Скачать PDF
-      </a>
     </div>
     <div class="contacts">
       <span>
@@ -127,6 +126,13 @@
         github.com/laxier
       </a>
     </div>
+    <div class="download">
+      <span class="updated">Обновлено <time data-deploy-date>10 октября 2026</time></span>
+      <a class="btn" href="docs/cv/Тимофеев_Кирилл_Юрьевич_FlowCV_Resume_2026-10-10.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
+        Скачать PDF
+      </a>
+    </div>
   </header>
 
   <section class="about">
@@ -140,7 +146,7 @@
 
     <div class="entry">
       <div class="entry-head">
-        <h3>Junior ML/LLM <span class="org">· <a href="nutrition-tracker/">Smart Nutrition Tracker</a> (стартап)</span></h3>
+        <h3>Junior ML/LLM <span class="org">· <a href="nutrition-tracker/index.html">Smart Nutrition Tracker</a> (стартап)</span></h3>
         <span class="date">12.2025 – 04.2026</span>
       </div>
       <p class="ctx">Команда из 5 человек, роль — LLM-инженер. Продукт — Telegram-бот (до ~1&nbsp;000 пользователей), в разработке iOS-приложение.</p>
@@ -186,7 +192,7 @@
 
     <div class="entry">
       <div class="entry-head">
-        <h3><a href="hanyu/"><span class="hz">汉语中心</span> — платформа для изучения китайского</a></h3>
+        <h3><a href="hanyu/index.html"><span class="hz">汉语中心</span> — платформа для изучения китайского</a></h3>
         <span class="date">2024 – н. в.</span>
       </div>
       <ul>
@@ -194,7 +200,7 @@
         <li>Колоды с интервальным повторением (SM-2), словарь с порядком черт, расписание уроков, аналитика прогресса.</li>
         <li>MCP-сервер для LLM-репетитора на Claude: 38 инструментов, Streamable HTTP / JSON-RPC в Django; в работе — оценка качества репетитора (LLM evals).</li>
         <li>OAuth 2.1 (PKCE, динамическая регистрация клиентов), REST API с OpenAPI, деплой на Amvera.</li>
-        <li>Плеер <a href="zimutai/"><span class="hz">字幕台</span></a> для изучения по видео: субтитры по словам, словарь по клику, отправка слов в колоду платформы.</li>
+        <li>Плеер <a href="zimutai/index.html"><span class="hz">字幕台</span></a> для изучения по видео: субтитры по словам, словарь по клику, отправка слов в колоду платформы.</li>
       </ul>
       <p class="stack">Python, Django, DRF, OAuth 2.1, MCP</p>
     </div>
@@ -240,6 +246,5 @@
   </section>
 
 </main>
-<footer>Обновлено <time data-deploy-date>10 октября 2026</time></footer>
 </body>
 </html>
