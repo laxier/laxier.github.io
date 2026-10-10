@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smart Nutrition Tracker — питание, лекарства и анализы в одном приложении</title>
+<meta name="description" content="Готовое iOS-приложение и бэкенд: дневник питания, расписание лекарств со складом, анализы с трендами и ассистент на Claude. Проект продаётся.">
+<meta property="og:title" content="Smart Nutrition Tracker">
+<meta property="og:description" content="Питание, лекарства и анализы в одном приложении. Проект продаётся целиком.">
+<meta property="og:image" content="https://laxier.github.io/nutrition-tracker/screenshots/01_diary.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&display=swap">
+<style>
+  /* Токены и шрифты — общие с остальными страницами сайта. */
+  :root {
+    --bg: #f4f6f9; --surface: #ffffff; --muted: #e9edf3; --text: #1c2230; --text-2: #5d6677;
+    --line: #dde2ea; --accent: #1f5fd6; --accent-ink: #ffffff; --ok: #3d9a63; --frame: #14151a;
+    --display: "Unbounded", "Golos Text", system-ui, sans-serif;
+    --body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #13161b; --surface: #1b1f26; --muted: #232831; --text: #e7eaf0; --text-2: #a0a9b8;
+      --line: #2b313b; --accent: #78a9ff; --accent-ink: #0d1118; --ok: #6cc08d; --frame: #000000;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #13161b; --surface: #1b1f26; --muted: #232831; --text: #e7eaf0; --text-2: #a0a9b8;
+    --line: #2b313b; --accent: #78a9ff; --accent-ink: #0d1118; --ok: #6cc08d; --frame: #000000;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 400 1.0625rem/1.6 var(--body);
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 0; }
+  .top .pill { white-space: nowrap; text-decoration: none; }
+  .brand { font: 700 1rem/1.2 var(--display); }
+  .pill {
+    display: inline-block; padding: 5px 12px; border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent); font-size: 13px; font-weight: 600;
+  }
+
+  h1 { font: 700 clamp(1.9rem, 5vw, 3rem)/1.12 var(--display); letter-spacing: -0.01em; margin: 18px 0; text-wrap: balance; }
+  h2 { font: 700 clamp(1.4rem, 3vw, 1.9rem)/1.2 var(--display); letter-spacing: -0.01em; margin: 0 0 14px; text-wrap: balance; }
+  h3 { font: 600 1.1rem/1.3 var(--body); margin: 0 0 6px; }
+  p { margin: 0 0 14px; }
+  .lead { font-size: clamp(18px, 2.2vw, 21px); color: var(--text-2); max-width: 34em; }
+  .sub { color: var(--text-2); }
+
+  .btn {
+    display: inline-block; padding: 14px 24px; border-radius: 14px;
+    background: var(--accent); color: var(--accent-ink);
+    font-weight: 600; text-decoration: none;
+  }
+  .btn.ghost { background: var(--muted); color: var(--text); }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+
+  .hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px; align-items: center; padding: 28px 0 72px; }
+  .phones { display: flex; justify-content: center; gap: 18px; }
+  .phone {
+    width: 250px; flex: none; border-radius: 38px; padding: 7px;
+    background: var(--frame); box-shadow: 0 24px 60px rgba(20, 24, 40, 0.18);
+  }
+  .phone img { display: block; width: 100%; height: auto; border-radius: 31px; }
+  .phone.back { transform: translateY(34px); }
+
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .feature.flip .copy { order: 2; }
+  .feature ul { margin: 16px 0 0; padding: 0; list-style: none; }
+  .feature li { padding: 10px 0 10px 30px; position: relative; border-top: 1px solid var(--line); }
+  .feature li::before {
+    content: ""; position: absolute; left: 4px; top: 19px;
+    width: 10px; height: 10px; border-radius: 50%; background: var(--ok);
+  }
+  .shots { display: flex; justify-content: center; gap: 16px; }
+  .shots .phone { width: 220px; }
+
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 26px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 20px; }
+  .stat b { display: block; font: 700 1.7rem/1.2 var(--display); }
+  .stat span { color: var(--text-2); font-size: 15px; }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 22px; }
+  .card p { color: var(--text-2); margin: 0; font-size: 16px; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th, td { text-align: left; padding: 12px 0; border-top: 1px solid var(--line); vertical-align: top; }
+  th { width: 34%; font-weight: 600; }
+  td { color: var(--text-2); }
+
+  .cta { text-align: center; }
+  .cta .lead { margin: 0 auto 8px; }
+  .cta .actions { justify-content: center; }
+
+  footer { padding: 32px 0 48px; color: var(--text-2); font-size: 14px; border-top: 1px solid var(--line); display: grid; gap: 6px; }
+  footer a { color: var(--accent); }
+  .btn:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+
+  .hero > *, .feature > * { min-width: 0; }
+  @media (max-width: 860px) {
+    .hero, .feature { grid-template-columns: 1fr; gap: 32px; }
+    .feature.flip .copy { order: 0; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+    .phones, .shots { gap: 12px; }
+    .phone { width: auto; flex: 1 1 0; min-width: 0; max-width: 230px; border-radius: 32px; padding: 6px; }
+    .phone img { border-radius: 26px; }
+    .shots .phone { width: auto; }
+    .phone.back { transform: none; }
+    section { padding: 48px 0; }
+    th { width: 40%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="brand">Smart Nutrition Tracker</span>
+    <a class="pill" href="#contact">Проект продаётся</a>
+  </header>
+
+  <div class="hero">
+    <div>
+      <span class="pill">Telegram-бот · iOS · FastAPI · Claude</span>
+      <h1>Питание, лекарства и анализы — в одном приложении</h1>
+      <p class="lead">Трекер здоровья, где главный интерфейс — диалог: одна реплика в Telegram-боте или в чате приложения, и ассистент сам добавит ужин, отметит таблетку и посчитает, сколько осталось до цели.</p>
+      <div class="actions">
+        <a class="btn" href="#contact">Обсудить покупку</a>
+        <a class="btn ghost" href="#inside">Что внутри</a>
+      </div>
+    </div>
+    <div class="phones">
+      <div class="phone"><img src="screenshots/01_diary.png" alt="Дневник питания: калории и БЖУ за день, приёмы пищи"></div>
+      <div class="phone back"><img src="screenshots/11_chat.png" alt="Чат с ассистентом: записал ужин и отметил приём лекарства"></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="feature">
+      <div class="copy">
+        <h2>Дневник питания без ручного счёта</h2>
+        <p class="sub">Калории и БЖУ считаются сами, цель на день видна сразу.</p>
+        <ul>
+          <li>Поиск по своей базе продуктов и частые продукты под рукой</li>
+          <li>Сканер штрихкодов, распознавание по фото и разбор чека</li>
+          <li>Свои блюда из ингредиентов, вода и кофеин</li>
+          <li>Отчёты за день, неделю и месяц, экспорт в PDF</li>
+        </ul>
+      </div>
+      <div class="shots">
+        <div class="phone"><img src="screenshots/05_search.png" alt="Поиск продуктов и частые продукты" loading="lazy"></div>
+        <div class="phone"><img src="screenshots/10_reports.png" alt="Недельный отчёт по калориям и шагам" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="feature flip">
+      <div class="copy">
+        <h2>Лекарства: расписание, склад и курсы</h2>
+        <p class="sub">Не просто напоминалка — приложение знает, сколько осталось и когда закончится.</p>
+        <ul>
+          <li>Слоты на день с отметкой в один тап и напоминаниями</li>
+          <li>Склад по партиям со сроками годности</li>
+          <li>Прогноз «на сколько дней хватит» с учётом смены дозы</li>
+          <li>Курсы с целью по длительности или суммарной дозе</li>
+        </ul>
+      </div>
+      <div class="shots">
+        <div class="phone"><img src="screenshots/02_medications_today.png" alt="Лекарства на сегодня по времени приёма" loading="lazy"></div>
+        <div class="phone"><img src="screenshots/03_medications_items.png" alt="Препараты и остаток на складе" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="feature">
+      <div class="copy">
+        <h2>Анализы и состав тела в динамике</h2>
+        <p class="sub">Каждый показатель — с нормой и трендом, а не отдельной бумажкой.</p>
+        <ul>
+          <li>Референсы по полу и возрасту на дату сдачи</li>
+          <li>Группировка по категориям и история по каждому маркеру</li>
+          <li>Вес, жир и мышечная масса с умных весов</li>
+          <li>Шаги и активность из Apple Health</li>
+        </ul>
+      </div>
+      <div class="shots">
+        <div class="phone"><img src="screenshots/09_lab.png" alt="Биомаркеры с трендами и статусом нормы" loading="lazy"></div>
+        <div class="phone"><img src="screenshots/08_weight.png" alt="Вес и состав тела с графиком" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="feature flip">
+      <div class="copy">
+        <h2>Ассистент, который делает, а не советует</h2>
+        <p class="sub">Чат на Claude подключён к тем же операциям, что и интерфейс: он создаёт записи, а не пересказывает инструкцию.</p>
+        <ul>
+          <li>«На ужин лосось 170 г» — запись появляется в дневнике</li>
+          <li>«Выпил цетиризин» — отмечен нужный слот, остаток списан</li>
+          <li>Под ответом — карточки созданных записей</li>
+          <li>Те же 72 операции доступны снаружи как MCP-сервер</li>
+        </ul>
+      </div>
+      <div class="shots">
+        <div class="phone"><img src="screenshots/11_chat.png" alt="Чат с ассистентом и карточками созданных записей" loading="lazy"></div>
+        <div class="phone"><img src="screenshots/07_profile.png" alt="Профиль: вес и питание за 7 дней" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="inside">
+    <h2>Что внутри</h2>
+    <p class="lead">Рабочий продукт команды из 5 человек: Telegram-бот, до ~1 000 пользователей, iOS-приложение и бэкенд в продакшене. Приложение в App Store не опубликовано.</p>
+    <div class="grid">
+      <div class="stat"><b>~1 000</b><span>пользователей Telegram-бота</span></div>
+      <div class="stat"><b>60 тыс.</b><span>строк кода: Dart и Python</span></div>
+      <div class="stat"><b>72</b><span>инструмента для ассистента</span></div>
+      <div class="stat"><b>199</b><span>тестов на бэкенде</span></div>
+    </div>
+    <table>
+      <tr><th>Приложение</th><td>Flutter 3 (iOS), виджет и Live Activity на Swift, Apple Health, локальные уведомления, сканер штрихкодов</td></tr>
+      <tr><th>Бэкенд</th><td>Python 3.12, FastAPI, SQLAlchemy 2, Pydantic 2, 43 миграции Alembic, Telegram-бот на aiogram, Docker</td></tr>
+      <tr><th>ИИ</th><td>Anthropic API: чат с вызовом инструментов, распознавание еды по фото; собственный MCP-сервер</td></tr>
+      <tr><th>Данные</th><td>SQLite; склад лекарств как журнал движений, идемпотентные отметки приёмов, время в UTC</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Что получает покупатель</h2>
+    <div class="cards">
+      <div class="card"><h3>Весь исходный код</h3><p>Приложение, бэкенд, MCP-сервер, миграции и тесты — с историей изменений и журналом версий.</p></div>
+      <div class="card"><h3>Готовую основу продукта</h3><p>Четыре связанных модуля уже работают вместе: питание, лекарства, анализы, тело.</p></div>
+      <div class="card"><h3>Передачу от команды</h3><p>Разбор архитектуры, развёртывание и ответы на вопросы — условия обсуждаются.</p></div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <h2>Интересен проект?</h2>
+    <p class="lead">Покажу приложение вживую и отвечу на вопросы по коду.</p>
+    <div class="actions">
+      <a class="btn" href="https://github.com/laxier">Написать на GitHub</a>
+    </div>
+  </section>
+
+  <footer>
+    <span><a href="../">← Все проекты</a> · Кирилл Тимофеев, LLM-инженер в команде проекта</span>
+    <span>На скриншотах демо-данные. Приложение не является медицинским изделием и не заменяет консультацию врача.</span>
+  </footer>
+
+</div>
+</body>
+</html>
