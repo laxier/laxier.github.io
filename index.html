@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Тимофеев Кирилл — резюме</title>
+<meta name="description" content="Тимофеев Кирилл Юрьевич — Junior+ ML/LLM Engineer. Резюме: опыт, проекты, образование.">
+<meta property="og:title" content="Тимофеев Кирилл — резюме">
+<meta property="og:description" content="Junior+ ML/LLM Engineer: агентные системы на Claude API и MCP, ML-бэкенд, анализ данных.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231f5fd6'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3EКТ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&family=Noto+Serif+SC:wght@500;700&display=swap">
+<style>
+  /* Токены и шрифты — общие с остальными страницами сайта. */
+  :root {
+    --bg: #f4f6f9; --surface: #ffffff; --ink: #1c2230; --muted: #5d6677; --line: #dde2ea; --accent: #1f5fd6;
+    --display: "Unbounded", "Golos Text", system-ui, sans-serif;
+    --body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --hanzi: "Noto Serif SC", "Songti SC", "SimSun", serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #13161b; --surface: #1b1f26; --ink: #e7eaf0; --muted: #a0a9b8; --line: #2b313b; --accent: #78a9ff; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #13161b; --surface: #1b1f26; --ink: #e7eaf0; --muted: #a0a9b8; --line: #2b313b; --accent: #78a9ff; color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.6 var(--body); padding: 2.5rem 16px 3rem; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  h1, h2, h3, p { margin: 0; }
+  .hz { font-family: var(--hanzi); }
+
+  .sheet {
+    max-width: 860px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+    padding: 2.75rem 3rem; display: grid; gap: 2.25rem;
+  }
+
+  /* Шапка */
+  .head { display: grid; gap: .85rem; }
+  .head-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  h1 { font: 700 clamp(1.6rem, 4.4vw, 2.3rem)/1.15 var(--display); letter-spacing: -0.01em; }
+  .title { font: 500 1.1rem/1.3 var(--display); color: var(--muted); margin-top: .35rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .45rem; padding: .6rem 1.05rem; border-radius: 999px;
+    font: 600 .9rem/1 var(--body); text-decoration: none; background: var(--accent); color: var(--bg); white-space: nowrap;
+  }
+  .btn svg { width: 1em; height: 1em; }
+  .contacts { display: flex; flex-wrap: wrap; gap: .35rem 1.4rem; color: var(--muted); font-size: .93rem; }
+  .contacts a, .contacts span { color: inherit; display: inline-flex; align-items: center; gap: .4rem; }
+  .contacts svg { width: .95rem; height: .95rem; flex: none; }
+
+  /* Разделы */
+  section { display: grid; gap: 1rem; }
+  h2 {
+    font: 700 .82rem/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--accent);
+    padding-bottom: .6rem; border-bottom: 1.5px solid var(--line);
+  }
+  .about p + p { margin-top: .5rem; }
+  .about b { font-weight: 600; }
+
+  .entry { display: grid; gap: .35rem; }
+  .entry + .entry { margin-top: .9rem; }
+  .entry-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .1rem 1rem; }
+  .entry h3 { font: 600 1.02rem/1.35 var(--body); }
+  .entry h3 .org { font-weight: 400; color: var(--muted); }
+  .date { font-size: .88rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ctx { color: var(--muted); font-size: .95rem; }
+  .entry ul { margin: .15rem 0 0; padding-left: 1.15rem; display: grid; gap: .3rem; }
+  .entry li { font-size: .97rem; }
+  .entry li::marker { color: var(--accent); }
+  .stack { font-size: .88rem; color: var(--muted); }
+  .stack a { font-weight: 500; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 2.25rem; }
+
+  footer { max-width: 860px; margin: 1.25rem auto 0; color: var(--muted); font-size: .85rem; text-align: center; }
+
+  @media (max-width: 640px) {
+    body { padding: 0; }
+    .sheet { border: 0; border-radius: 0; padding: 1.75rem 16px 2rem; gap: 1.9rem; }
+    .two { grid-template-columns: 1fr; gap: 1.9rem; }
+    .btn { width: 100%; justify-content: center; }
+    footer { padding: 0 16px 2rem; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .sheet { border: 0; padding: 0; }
+    .btn, footer { display: none; }
+  }
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <header class="head">
+    <div class="head-top">
+      <div>
+        <h1>Тимофеев Кирилл Юрьевич</h1>
+        <p class="title">Junior+ ML / LLM Engineer</p>
+      </div>
+      <a class="btn" href="docs/cv/Тимофеев_Кирилл_Юрьевич_FlowCV_Resume_2026-10-10.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
+        Скачать PDF
+      </a>
+    </div>
+    <div class="contacts">
+      <span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-5.4-7-11a7 7 0 0 1 14 0c0 5.6-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        Москва
+      </span>
+      <a href="https://t.me/k_timofeev7" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.7 19.4c-.2 1-.9 1.3-1.7.8l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.3-.1-.5-.6-.2L6.5 13.2 1.8 11.7c-1-.3-1-1 .2-1.5L20.5 3c.9-.3 1.6.2 1.4 1.3z"/></svg>
+        @k_timofeev7
+      </a>
+      <a href="mailto:hash0xcb8c@yandex.ru">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        hash0xcb8c@yandex.ru
+      </a>
+      <a href="https://github.com/laxier" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7c-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>
+        github.com/laxier
+      </a>
+    </div>
+  </header>
+
+  <section class="about">
+    <h2>О себе</h2>
+    <p>ML/LLM-инженер: проектирую агентные системы на Claude API и MCP — tool use, structured output, мультимодальность. LLM-ядро моего последнего продукта обслуживало около 1&nbsp;000 пользователей. До этого — аналитик данных (SQL, витрины, A/B-тесты) и заказная разработка на Python.</p>
+    <p><b>Стек:</b> Python, SQL, PostgreSQL, Pandas, PySpark, scikit-learn, CatBoost, PyTorch, YOLO, Hugging Face Transformers, Claude API, LangChain, MCP, RAG, FastAPI, SQLAlchemy, Django, Docker, MLflow, Airflow, Git.</p>
+  </section>
+
+  <section>
+    <h2>Опыт работы</h2>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Junior ML/LLM <span class="org">· <a href="nutrition-tracker/">Smart Nutrition Tracker</a> (стартап)</span></h3>
+        <span class="date">12.2025 – 04.2026</span>
+      </div>
+      <p class="ctx">Команда из 5 человек, роль — LLM-инженер. Продукт — Telegram-бот (до ~1&nbsp;000 пользователей), в разработке iOS-приложение.</p>
+      <ul>
+        <li>Сделал LLM основным интерфейсом продукта: MCP-сервер на 45 инструментов (питание, привычки, здоровье, лекарства, курсы, склад) — все данные вносятся одной репликой в чат, без форм.</li>
+        <li>Убрал выдуманные моделью значения КБЖУ: каскадный резолвер с кэшем и structured output с валидацией — цифры берёт приложение, а не LLM.</li>
+        <li>Реализовал agentic-цикл на Claude API (tool_use → tool_result); MCP встроен в FastAPI через Streamable HTTP, ответы стримятся по SSE.</li>
+        <li>Настроил мультимодальное распознавание блюд и этикеток по фото с нормализацией значений на 100&nbsp;г/мл.</li>
+      </ul>
+      <p class="stack">Python, FastAPI, SQLAlchemy, PostgreSQL, Claude API, MCP</p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Junior ML/LLM <span class="org">· Фриланс, Cross-border Commerce Automation</span></h3>
+        <span class="date">11.2025 – 12.2025</span>
+      </div>
+      <p class="ctx">Заказная разработка, работал один. Продукт — тулинг для закупок на Taobao и Pinduoduo с доставкой в РФ через карго-посредников.</p>
+      <ul>
+        <li>Интегрировал API складского оператора: консолидация отправлений и трекинг от склада в Китае до выдачи, ~700 позиций в 30 отправлениях.</li>
+        <li>Сократил оформление документов с ~1,5 мин до ~20 сек на позицию: описание товара пишет LLM со структурированным выводом.</li>
+      </ul>
+      <p class="stack">Python, REST API, LLM-пайплайн со структурированным выводом</p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Data Analyst / ETL / Junior ML <span class="org">· Самолет Плюс, Ульяновск</span></h3>
+        <span class="date">03.2023 – 08.2023</span>
+      </div>
+      <p class="ctx">Стажировка, роль — аналитик данных. Продукт — аналитика сделок сети агентств недвижимости.</p>
+      <ul>
+        <li>Собрал витрины на SQL (PostgreSQL) под клиентскую аналитику: активность, конверсии, retention, воронки.</li>
+        <li>Свёл данные из разных источников в датасеты под аналитику и ML на PySpark и Python.</li>
+        <li>Проводил A/B-тесты: считал метрики, сравнивал группы и объяснял результаты команде.</li>
+      </ul>
+      <p class="stack">Python, SQL, Pandas, NumPy, PostgreSQL, PySpark, ETL</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Проекты</h2>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3><a href="hanyu/"><span class="hz">汉语中心</span> — платформа для изучения китайского</a></h3>
+        <span class="date">2024 – н. в.</span>
+      </div>
+      <ul>
+        <li>Начал на Flask, перевёл на Django/DRF ради масштабирования: 8 Django-модулей, ~350 коммитов, работает в продакшене.</li>
+        <li>Колоды с интервальным повторением (SM-2), словарь с порядком черт, расписание уроков, аналитика прогресса.</li>
+        <li>MCP-сервер для LLM-репетитора на Claude: 38 инструментов, Streamable HTTP / JSON-RPC в Django; в работе — оценка качества репетитора (LLM evals).</li>
+        <li>OAuth 2.1 (PKCE, динамическая регистрация клиентов), REST API с OpenAPI, деплой на Amvera.</li>
+        <li>Плеер <a href="zimutai/"><span class="hz">字幕台</span></a> для изучения по видео: субтитры по словам, словарь по клику, отправка слов в колоду платформы.</li>
+      </ul>
+      <p class="stack">Python, Django, DRF, OAuth 2.1, MCP</p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Детекция объектов на аэроснимках</h3>
+        <span class="date">2024 – 2025</span>
+      </div>
+      <ul>
+        <li>Обучил и сравнил модели YOLOv5/YOLOv8 для детекции объектов по метрикам на валидационной выборке.</li>
+      </ul>
+      <p class="stack">Python, PyTorch, Ultralytics YOLO, CUDA</p>
+    </div>
+  </section>
+
+  <div class="two">
+    <section>
+      <h2>Образование</h2>
+      <div class="entry">
+        <div class="entry-head">
+          <h3>Финансовый университет при Правительстве РФ</h3>
+        </div>
+        <p class="ctx">Бакалавриат, 01.03.02 «Прикладная математика и информатика», профиль «Прикладное машинное обучение». Очная форма, 2023 – 2027.</p>
+      </div>
+    </section>
+    <section>
+      <h2>Достижения</h2>
+      <div class="entry">
+        <h3>Летняя школа Zhongnan University, 2025</h3>
+        <p class="ctx">Прикладная статистика и эконометрика.</p>
+      </div>
+      <div class="entry">
+        <h3>«Системный анализ в экономике — 2024»</h3>
+        <p class="ctx">Доклад о факторах заболеваемости гриппом.</p>
+      </div>
+    </section>
+  </div>
+
+  <section>
+    <h2>Языки</h2>
+    <p>Русский — родной · Английский — B2 · Китайский — B1</p>
+  </section>
+
+</main>
+<footer>Обновлено <time data-deploy-date>10 октября 2026</time></footer>
+</body>
+</html>
