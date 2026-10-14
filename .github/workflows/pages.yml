@@ -23,9 +23,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
+      - name: Point download button at the newest resume
+        run: |
+          latest=$(for f in docs/cv/*.pdf; do
+            echo "$(echo "$f" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | tail -1) $(git log -1 --format=%ct -- "$f") $f"
+          done | sort | tail -1 | cut -d' ' -f3-)
+          echo "Newest resume: $latest"
+          sed -i "s|href=\"docs/cv/[^\"]*\.pdf\"|href=\"${latest}\"|" index.html
 
       - name: Stamp deployment date
         run: |
