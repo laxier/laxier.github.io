@@ -3,6 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - 'index.html'
+      - 'docs/**'
+      - 'hanyu/**'
+      - 'nutrition-tracker/**'
+      - 'zimutai/**'
+      - 'scripts/**'
   workflow_dispatch:
 
 permissions:
@@ -49,11 +56,6 @@ jobs:
           done | sort | tail -1 | cut -d' ' -f3-)
           echo "Newest resume: $latest"
           sed -i "s|href=\"docs/cv/[^\"]*\.pdf\"|href=\"${latest}\"|" index.html
-
-      - name: Stamp deployment date
-        run: |
-          deploy_date=$(date -u '+%d.%m.%Y')
-          sed -i "s/data-deploy-date>[^<]*/data-deploy-date>${deploy_date}/" index.html
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
