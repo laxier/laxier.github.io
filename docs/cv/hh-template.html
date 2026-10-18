@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Тимофеев Кирилл Юрьевич — резюме</title>
+  <style>
+    :root { font-family: Arial, sans-serif; color: #222; background: #fff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-size: 13px; line-height: 1.38; }
+    main { width: 190mm; margin: 0 auto; padding: 12mm 0; }
+    h1 { margin: 0 0 4px; font-size: 25px; }
+    h2 { margin: 24px 0 12px; padding-bottom: 5px; border-bottom: 1px solid #ddd; color: #999; font-size: 18px; font-weight: 400; }
+    h3 { margin: 0; font-size: 16px; }
+    p { margin: 5px 0; }
+    ul { margin: 7px 0 8px; padding-left: 20px; }
+    li { margin: 3px 0; }
+    a { color: inherit; }
+    .muted { color: #777; }
+    .header { display: grid; grid-template-columns: 1fr 190px; gap: 24px; }
+    .contact { text-align: right; line-height: 1.55; }
+    .role { margin-top: 18px; }
+    .role strong { font-size: 18px; }
+    .entry { display: grid; grid-template-columns: 135px 1fr; gap: 18px; margin: 0 0 18px; }
+    .date { color: #777; }
+    .entry-title { font-weight: 700; font-size: 16px; }
+    .entry-title span { font-weight: 400; }
+    .stack { color: #555; }
+    .skills { display: grid; grid-template-columns: 135px 1fr; gap: 18px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px 9px; }
+    .tag { padding: 2px 6px; background: #e8e8e8; }
+    .about { display: grid; grid-template-columns: 135px 1fr; gap: 18px; }
+    @media print { body { font-size: 12px; } main { padding: 0; } h2 { break-after: avoid; } .entry { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+<main>
+  <header class="header">
+    <div>
+      <h1>Тимофеев Кирилл Юрьевич</h1>
+      <p>Мужчина, 22 года, родился 27 ноября 2003</p>
+      <p>Проживает: Москва</p>
+      <p>Гражданство: Россия, есть разрешение на работу: Россия</p>
+      <p>Не готов к переезду, не готов к командировкам</p>
+    </div>
+    <div class="contact">
+      <div>+7 (926) 505-48-29</div>
+      <div><a href="mailto:hash0xcb8c@yandex.ru">hash0xcb8c@yandex.ru</a></div>
+      <div><a href="https://github.com/laxier">github.com/laxier</a></div>
+    </div>
+  </header>
+
+  <section class="role">
+    <h2>Желаемая должность и зарплата</h2>
+    <p><strong>ML-инженер</strong></p>
+    <p>Специализации: BI-аналитик, аналитик данных; Дата-сайентист; Программист, разработчик</p>
+    <p>Тип занятости: полная занятость</p>
+    <p>Формат работы: на месте работодателя</p>
+  </section>
+
+  <section>
+    <h2>Опыт работы</h2>
+    <article class="entry">
+      <div class="date">Декабрь 2025 —<br>Апрель 2026<br><br>5 месяцев</div>
+      <div><div class="entry-title">Умный трекер питания <span>— Junior ML/LLM Engineer</span></div><p class="muted">Команда из 5 человек. Telegram-бот на ~1000 пользователей и iOS-приложение</p>
+        <ul><li>Спроектировал агентный цикл на Claude API (tool_use → tool_result) с лимитом шагов (до 5–7 итераций), возвратом ошибок инструментов модели и стримингом ответов по SSE. Сократил задержку первого токена (TTFT) до 400–600 мс.</li><li>Реализовал MCP-сервер на 75 инструментов с авторизацией OAuth 2.1 (FastMCP, FastAPI, Streamable HTTP) для подключения внешних ИИ-агентов.</li><li>Снизил количество ошибок в ответах модели с 12% до 0.5% с помощью каскадного поиска данных, валидации Structured Output через Pydantic v2 и переноса математических расчётов в Python-код.</li><li>Настроил мультимодальное распознавание блюд, продуктовых этикеток и бланков анализов по фото с приведением извлеченных данных к единому структурированному формату.</li><li>Выстроил отладку промптов по логам: разбирал реальные диалоги и сбои агента в продакшене, правил системный промпт и спецификации инструментов. Доля неверных вызовов (tool call errors) снизилась с 18% до 3%.</li><li>Написал бэкенд сервиса: разработал архитектуру на FastAPI и SQLAlchemy, настроил миграции через Alembic и упаковал приложение в Docker.</li></ul>
+        <p class="stack">Стек: Python, FastAPI, SQLAlchemy, Alembic, Claude API, MCP, Pydantic v2, Docker, SSE, OAuth 2.1.</p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="date">Ноябрь 2025 —<br>Декабрь 2025<br><br>2 месяца</div>
+      <div><div class="entry-title">Автоматизация закупок из Китая <span>— Python-разработчик / AI Engineer</span></div><p class="muted">Заказная разработка под байера, инструменты для Taobao и Pinduoduo</p>
+        <ul><li>Разработал локальный прокси-сервис на FastAPI, который через Claude API генерирует товарные описания для таможенных документов в реальном времени.</li><li>Спроектировал LLM-пайплайн со структурированным выводом (Structured Output) для сборки сопроводительной документации по строгим правилам.</li><li>Внедрил автоматическую оценку качества ответов по схеме LLM-as-a-judge (верификация второй моделью) с автоматическим фолбеком на ручную проверку человеком в спорных случаях.</li><li>Написал клиентские скрипты на JavaScript (Tampermonkey) для встраивания разработанного API прямо в веб-интерфейсы китайских маркетплейсов.</li><li>Ускорил подготовку документов байера: время обработки одной позиции снизилось с ~1.5 минут до ~20 секунд. Сэкономил заказчику около 13 часов ручного ввода на партии из 700 позиций (30 отправлений).</li></ul>
+        <p class="stack">Стек: Python, FastAPI, JavaScript, Claude API, REST API, Structured Output.</p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="date">Март 2023 —<br>Август 2023<br><br>6 месяцев</div>
+      <div><div class="entry-title">Стажер <span>— Data Analyst / ML Engineer</span></div><p class="muted">Компания: Самолет Плюс</p>
+        <ul><li><b>Продуктовая аналитика:</b> Разработал и оптимизировал витрины данных на базе SQL и PostgreSQL для сквозной аналитики сделок сети агентств недвижимости.</li><li><b>Расчет метрик:</b> Реализовал расчет ключевых продуктовых метрик, включая активность пользователей (DAU/MAU), конверсии на этапах воронки продаж и показатели удержания клиентов (Retention Rate).</li><li><b>Инженерия данных (ETL):</b> Построил отказоустойчивые ETL-процессы с использованием PySpark и Python для сбора, очистки и агрегации разрозненных данных из различных источников в единые аналитические датасеты.</li><li><b>Подготовка данных для ML:</b> Сформировал структурированные наборы данных (датасеты) для последующего обучения моделей машинного обучения (Machine Learning).</li><li><b>A/B-тестирование:</b> Проводил статистический анализ в рамках A/B-тестов, рассчитывал необходимый размер выборок, проверял статистические гипотезы и презентовал продуктовые инсайты команде.</li></ul>
+        <p class="stack"><b>Технологический стек:</b> Python, SQL, PostgreSQL, PySpark, ETL, Pandas, NumPy, A/B-testing, Продуктовые метрики.</p>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <h2>Проекты</h2>
+    <article class="entry">
+      <div class="date">2024 —<br>по настоящее время<br><br>Пет-проект</div>
+      <div><div class="entry-title">汉语中心 <span>— платформа для изучения китайского</span></div><p><a href="https://laxier.github.io/hanyu">laxier.github.io/hanyu</a></p>
+        <ul><li>Перенёс бэкенд проекта с Flask на Django/DRF для повышения стабильности и масштабируемости системы; спроектировал архитектуру из 8 изолированных модулей (~350 коммитов).</li><li>Разработал MCP-сервер на 38 инструментов (управление колодами, уроками, расписанием), интегрировав его с Django через Streamable HTTP / JSON-RPC для прямого управления функциями из чата с моделью.</li><li>Реализовал алгоритм интервального повторения слов SM-2: настроил расчёт времени возврата карточек ученику и вывод аналитики прогресса.</li><li>Настроил безопасность подключений по OAuth 2.1 (с поддержкой PKCE и динамической регистрацией клиентов), исключив передачу прямых паролей ИИ-репетитору.</li><li>Покрыл бэкенд REST API OpenAPI-документацией и настроил автоматический деплой проекта на облачную платформу Amvera.</li><li>Разрабатываю систему автоматического тестирования LLM eval для мониторинга и численной оценки качества ответов ИИ-педагога.</li><li>Плеер 字幕台 для изучения по видео: субтитры по словам, словарь по клику, отправка слов в колоду платформы.</li></ul>
+        <p class="stack">Стек: Python, Django, DRF, Claude API, MCP, JSON-RPC, OAuth 2.1, OpenAPI, SM-2, Amvera.</p>
+      </div>
+    </article>
+    <article class="entry">
+      <div class="date">2026 —<br>по настоящее время<br><br>Пет-проект / диплом</div>
+      <div><div class="entry-title">Дипломный / Пет-проект: Извлечение атрибутов товаров с помощью квантованных LLM</div><p class="muted">Роль: Machine Learning Engineer / Разработчик (Исследования и Разработка)</p>
+        <ul><li><b>Основная задача:</b> Разрабатываю сквозной NLP-конвейер для дипломного проекта по извлечению характеристик и спецификаций мониторов из русскоязычных описаний товаров.</li><li><b>Проектирование pipeline:</b> Спроектировал конвейер данных с применением подходов few-shot prompting и ограниченной генерации по JSON-схеме для получения детерминированных ответов.</li><li><b>Адаптация моделей:</b> Провожу тонкую настройку (fine-tuning) и адаптацию языковых моделей методами QLoRA и LoRA с целью оптимизации весов под доменную задачу.</li><li><b>Исследовательская работа:</b> Анализирую ложноположительные срабатывания (false-positive) моделей и оцениваю возможности кросс-доменного переноса (cross-domain transfer).</li><li><b>Инженерия данных:</b> Занимаюсь подготовкой и генерацией синтетических наборов данных с использованием подходов SynthIE для последующего обучения.</li></ul>
+        <p class="stack"><b>Технологический стек:</b> Python, PyTorch, Transformers, bitsandbytes, 4-bit NF4, QLoRA, LoRA, XGrammar, JSON Schema, SynthIE.</p>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <h2>Проекты</h2>
+    <article class="entry">
+      <div class="date">2024 — 2025<br><br>Пет-проект</div>
+      <div><div class="entry-title">Пет-проект: Детекция объектов на аэроснимках</div><p class="muted">Роль: Computer Vision (CV) Engineer / Разработчик</p><ul><li><b>Основная задача:</b> Спроектировал и реализовал систему распознавания объектов на аэрофотоснимках с использованием алгоритмов компьютерного зрения.</li><li><b>Обучение моделей:</b> Провел предобработку датасета, настроил окружение и обучил сверточные нейросети семейств YOLOv5 и YOLOv8 с использованием аппаратного ускорения CUDA.</li><li><b>Валидация и анализ:</b> Сравнил обученные модели по ключевым метрикам компьютерного зрения (mAP, Precision, Recall) на валидационной выборке и выбрал наиболее эффективную архитектуру.</li></ul><p class="stack"><b>Технологический стек:</b> Python, PyTorch, Ultralytics YOLO, Computer Vision, CUDA.</p></div>
+    </article>
+  </section>
+
+  <section><h2>Образование</h2><article class="entry"><div class="date">2023 — 2027<br>Неоконченное высшее</div><div><div class="entry-title">Финансовый университет при Правительстве Российской Федерации, Москва</div><p>Прикладная математика и информатика, профиль «Прикладное машинное обучение».</p></div></article></section>
+  <section><h2>Повышение квалификации, курсы</h2><article class="entry"><div class="date">2027</div><div><div class="entry-title">Инженер по глубокому обучению нейросетей: NLP и аудиоречевые технологии</div><p>Яндекс Практикум</p></div></article></section>
+  <section><h2>Навыки</h2><div class="skills"><div class="muted">Знание языков</div><div>Русский — родной<br>Английский — B2 — Средне-продвинутый<br>Китайский — B1 — Средний</div><div class="muted">Навыки</div><div class="tags">Python SQL PostgreSQL FastAPI Django Django Rest Framework REST API SQLAlchemy Alembic asyncio Pytest Docker Git LLM RAG LangChain Chroma pgvector MCP FastMCP OAuth 2.1 NLP PyTorch PyTorch Lightning Hugging Face Transformers scikit-learn CatBoost LightGBM XGBoost Optuna Pandas NumPy PySpark A/B-тесты MLflow Airflow tool use structured output SSE extended thinking bitsandbytes QLoRA LoRA XGrammar JSON Schema SynthIE</div></div></section>
+  <section><h2>Дополнительная информация</h2><div class="about"><div class="muted">Обо мне</div><div><p>Junior ML/LLM Engineer / Backend-разработчик, коммерческий опыт с 2023 года. Пишу сервисы на Python (FastAPI, Django/DRF, SQLAlchemy, Docker) и строю вокруг них LLM-агентов: проектирую агентные циклы на Claude API, MCP-серверы с авторизацией OAuth 2.1, настраиваю стриминг ответов по SSE.</p><p>Поведение языковых моделей контролирую инженерными методами: валидацией данных, structured output, переносом расчётов в код, логированием ошибок и оценкой качества через LLM-as-a-judge с передачей спорных случаев человеку. Имею опыт командной разработки, создания инструментов для автоматизации B2B-закупок и запуска веб-сервисов с нуля в продакшн. Использую рабочий китайский язык (B1) для разбора документов и карточек товаров на Taobao и Pinduoduo.</p><p><b>Backend:</b> Python, FastAPI, Django/DRF, REST API, SQLAlchemy, Alembic, SQL, SQLite, Docker, Git, pytest, asyncio.<br><b>LLM Engineering:</b> tool use, structured output, мультимодальные запросы, стриминг через SSE, extended thinking, MCP-серверы (FastMCP, OAuth 2.1), RAG (LangChain, Chroma, pgvector), LLM-as-a-judge / LLM eval.<br><b>Classical ML &amp; Data:</b> PyTorch, PyTorch Lightning, scikit-learn, CatBoost, LightGBM, XGBoost, Optuna, Hugging Face Transformers, PySpark, Pandas, PostgreSQL, MLflow, Airflow, A/B-тесты.<br><b>Diploma / LLM Research:</b> quantized LLM, 4-bit NF4, QLoRA, LoRA, bitsandbytes, XGrammar, JSON Schema, constrained decoding, SynthIE, micro-F1 / macro-F1, bootstrap-анализ.</p></div></div></section>
+</main>
+</body>
+</html>

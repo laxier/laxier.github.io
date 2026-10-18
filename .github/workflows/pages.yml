@@ -29,6 +29,19 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Build HH resume PDF
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PDF build tools
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Generate HH resume PDF
+        run: python scripts/build_all.py
+
       - name: Point download button at the newest resume
         run: |
           latest=$(for f in docs/cv/*.pdf; do

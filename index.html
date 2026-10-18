@@ -128,7 +128,7 @@
     </div>
     <div class="download">
       <span class="updated">Обновлено <time data-deploy-date>10 октября 2026</time></span>
-      <a class="btn" href="docs/cv/Тимофеев_Кирилл_Юрьевич_FlowCV_Resume_2026-10-14.pdf" target="_blank" rel="noopener">
+      <a class="btn" href="docs/cv/Тимофеев_Кирилл_Юрьевич_hh_Resume_2026-10-14.pdf" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
         Скачать PDF
       </a>
@@ -142,6 +142,7 @@
     <p><b>Backend:</b> Python, FastAPI, Django/DRF, REST API, SQLAlchemy, Alembic, SQL, SQLite, Docker, Git, pytest, asyncio.<br>
     <b>LLM Engineering:</b> tool use, structured output, мультимодальные запросы, стриминг через SSE, extended thinking, MCP-серверы (FastMCP, OAuth&nbsp;2.1), RAG (LangChain, Chroma, pgvector), LLM-as-a-judge / LLM eval.<br>
     <b>Classical ML &amp; Data:</b> PyTorch, PyTorch Lightning, scikit-learn, CatBoost, LightGBM, XGBoost, Optuna, Hugging Face Transformers, PySpark, Pandas, PostgreSQL, MLflow, Airflow, A/B-тесты.<br>
+    <b>Diploma / LLM Research:</b> quantized LLM, 4-bit NF4, QLoRA, LoRA, bitsandbytes, XGrammar, JSON Schema, constrained decoding, SynthIE, micro-F1 / macro-F1, bootstrap-анализ.<br>
     <b>Языки:</b> английский B2, китайский B1.</p>
   </section>
 
@@ -183,21 +184,39 @@
 
     <div class="entry">
       <div class="entry-head">
-        <h3>Data Analyst / ETL / Junior ML <span class="org">· Самолет Плюс</span></h3>
+        <h3>Стажер — Data Analyst / ML Engineer <span class="org">· Самолет Плюс</span></h3>
         <span class="date">03.2023 – 08.2023</span>
       </div>
       <p class="ctx">Стажировка, аналитика сделок сети агентств недвижимости</p>
       <ul>
-        <li>Разработал витрины данных на SQL (PostgreSQL) для продуктовой аналитики: считал активность пользователей, конверсии воронки продаж и метрики удержания (retention).</li>
-        <li>Построил ETL-процессы на PySpark и Python: собирал, очищал и объединял разрозненные данные из разных источников в единые датасеты для аналитики и ML-моделей.</li>
-        <li>Проводил A/B-тестирование: рассчитывал размеры выборок, проверял статистические гипотезы, сравнивал группы и готовил выводы для продуктовой команды.</li>
+        <li><b>Продуктовая аналитика:</b> Разработал и оптимизировал витрины данных на базе SQL и PostgreSQL для сквозной аналитики сделок сети агентств недвижимости.</li>
+        <li><b>Расчет метрик:</b> Реализовал расчет ключевых продуктовых метрик, включая активность пользователей (DAU/MAU), конверсии на этапах воронки продаж и показатели удержания клиентов (Retention Rate).</li>
+        <li><b>Инженерия данных (ETL):</b> Построил отказоустойчивые ETL-процессы с использованием PySpark и Python для сбора, очистки и агрегации разрозненных данных из различных источников в единые аналитические датасеты.</li>
+        <li><b>Подготовка данных для ML:</b> Сформировал структурированные наборы данных (датасеты) для последующего обучения моделей машинного обучения (Machine Learning).</li>
+        <li><b>A/B-тестирование:</b> Проводил статистический анализ в рамках A/B-тестов, рассчитывал необходимый размер выборок, проверял статистические гипотезы и презентовал продуктовые инсайты команде.</li>
       </ul>
-      <p class="stack">Стек: Python, SQL, Pandas, NumPy, PostgreSQL, PySpark, ETL.</p>
+      <p class="stack"><b>Технологический стек:</b> Python, SQL, PostgreSQL, PySpark, ETL, Pandas, NumPy, A/B-testing, Продуктовые метрики.</p>
     </div>
   </section>
 
-  <section>
+  <section id="projects">
     <h2>Проекты</h2>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Дипломный / Пет-проект: Извлечение атрибутов товаров с помощью квантованных LLM</h3>
+        <span class="date">2026 – по настоящее время</span>
+      </div>
+      <p class="ctx">Роль: Machine Learning Engineer / Разработчик (Исследования и Разработка)</p>
+      <ul>
+        <li><b>Основная задача:</b> Разрабатываю сквозной NLP-конвейер для дипломного проекта по извлечению характеристик и спецификаций мониторов из русскоязычных описаний товаров.</li>
+        <li><b>Проектирование pipeline:</b> Спроектировал конвейер данных с применением подходов few-shot prompting и ограниченной генерации по JSON-схеме для получения детерминированных ответов.</li>
+        <li><b>Адаптация моделей:</b> Провожу тонкую настройку (fine-tuning) и адаптацию языковых моделей методами QLoRA и LoRA с целью оптимизации весов под доменную задачу.</li>
+        <li><b>Исследовательская работа:</b> Анализирую ложноположительные срабатывания (false-positive) моделей и оцениваю возможности кросс-доменного переноса (cross-domain transfer).</li>
+        <li><b>Инженерия данных:</b> Занимаюсь подготовкой и генерацией синтетических наборов данных с использованием подходов SynthIE для последующего обучения.</li>
+      </ul>
+      <p class="stack"><b>Технологический стек:</b> Python, PyTorch, Transformers, bitsandbytes, 4-bit NF4, QLoRA, LoRA, XGrammar, JSON Schema, SynthIE.</p>
+    </div>
 
     <div class="entry">
       <div class="entry-head">
@@ -219,13 +238,16 @@
 
     <div class="entry">
       <div class="entry-head">
-        <h3>Детекция объектов на аэроснимках</h3>
+        <h3>Пет-проект: Детекция объектов на аэроснимках</h3>
         <span class="date">2024 – 2025</span>
       </div>
+      <p class="ctx">Роль: Computer Vision (CV) Engineer / Разработчик</p>
       <ul>
-        <li>Обучил и сравнил модели YOLOv5/YOLOv8 для детекции объектов по метрикам на валидационной выборке.</li>
+        <li><b>Основная задача:</b> Спроектировал и реализовал систему распознавания объектов на аэрофотоснимках с использованием алгоритмов компьютерного зрения.</li>
+        <li><b>Обучение моделей:</b> Провел предобработку датасета, настроил окружение и обучил сверточные нейросети семейств YOLOv5 и YOLOv8 с использованием аппаратного ускорения CUDA.</li>
+        <li><b>Валидация и анализ:</b> Сравнил обученные модели по ключевым метрикам компьютерного зрения (mAP, Precision, Recall) на валидационной выборке и выбрал наиболее эффективную архитектуру.</li>
       </ul>
-      <p class="stack">Python, PyTorch, Ultralytics YOLO, CUDA</p>
+      <p class="stack"><b>Технологический стек:</b> Python, PyTorch, Ultralytics YOLO, Computer Vision, CUDA.</p>
     </div>
   </section>
 
